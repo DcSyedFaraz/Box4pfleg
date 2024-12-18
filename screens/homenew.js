@@ -5,6 +5,7 @@ const windowWidth = Dimensions.get('window').width;
 const windowheight = Dimensions.get('window').height;
 
 const Homenew = () => {
+    console.log('CustomTabBarsss');
     return (
         <View style={styles.mainScreen}>
             <Text>homenew</Text>
