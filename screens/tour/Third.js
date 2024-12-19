@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Svg, { Path, Circle } from 'react-native-svg';
@@ -9,12 +9,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Tab = createBottomTabNavigator();
 
 
-const First = ({ navigation }) => {
+const Third = ({ navigation }) => {
     const handleFinishTour = async () => {
         // Mark the tour as completed
         await AsyncStorage.setItem('hasSeenTour', 'false');
         navigation.replace('Home'); // Navigate to the main app
     };
+
     return (
         <View style={styles.container}>
             {/* Logo */}
@@ -37,37 +38,44 @@ const First = ({ navigation }) => {
             {/* Main Icon */}
             <View style={styles.iconContainer}>
                 {/* Plus Icon */}
-                <Svg width="250" height="255" viewBox="0 0 250 215" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* <Svg width="250" height="215" viewBox="0 0 250 215" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <Circle cx="125" cy="102" r="102" fill="#E7F0F8" />
+                    <Path d="M194 66.25H138C124.469 66.25 113.5 77.219 113.5 90.75V171.25C113.5 184.781 124.469 195.75 138 195.75H194C207.531 195.75 218.5 184.781 218.5 171.25V90.75C218.5 77.219 207.531 66.25 194 66.25Z" stroke="#214184" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <Path d="M141.5 94.285H190.5M141.5 122.285H190.5M141.5 150.285H166" stroke="#214184" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round" />
                     <Path fill-rule="evenodd" clip-rule="evenodd" d="M29.1482 39.1482V21.8518C29.1482 15.4747 34.6229 10 41 10C47.3771 10 52.8518 15.4747 52.8518 21.8518V39.1482H70.1482C76.5253 39.1482 82 44.6229 82 51C82 57.3771 76.5253 62.8518 70.1482 62.8518H52.8518V80.1482C52.8518 86.5253 47.3771 92 41 92C34.6229 92 29.1482 86.5253 29.1482 80.1482V62.8518H11.8518C5.47469 61.9494 0 56.4747 0 50.0976C0 43.7205 5.47469 38.2458 11.8518 38.2458H29.1482V39.1482Z" fill="#8D9AB9" />
-                    <Path d="M234.718 87.2996L170.875 52.2599C169.383 51.4335 167.705 51 166 51C164.295 51 162.617 51.4335 161.125 52.2599L97.2816 87.2996C95.6841 88.1758 94.351 89.4664 93.4218 91.0363C92.4926 92.6062 92.0015 94.3977 92 96.2231V165.779C92.0015 167.604 92.4926 169.396 93.4218 170.966C94.351 172.536 95.6841 173.826 97.2816 174.702L161.125 209.742C162.618 210.567 164.295 211 166 211C167.705 211 169.382 210.567 170.875 209.742L234.718 174.702C236.316 173.826 237.649 172.536 238.578 170.966C239.507 169.396 239.998 167.604 240 165.779V96.2231C239.998 94.3977 239.507 92.6062 238.578 91.0363C237.649 89.4664 236.316 88.1758 234.718 87.2996ZM165.275 59.9107C165.488 59.7936 165.728 59.7322 165.971 59.7322C166.214 59.7322 166.454 59.7936 166.667 59.9107L227.311 93.1832L202.688 106.689L141.37 73.0452L165.275 59.9107ZM161.647 200.091L101.431 167.052C101.209 166.923 101.024 166.737 100.897 166.514C100.77 166.29 100.704 166.036 100.706 165.779V100.936L161.647 134.39V200.091ZM104.689 93.1832L132.308 78.0197L193.619 111.663L166 126.812L104.689 93.1832ZM231.294 165.779C231.296 166.036 231.23 166.29 231.103 166.514C230.976 166.737 230.791 166.923 230.569 167.052L170.353 200.091V134.376L196.471 120.041V148.455C196.471 149.613 196.929 150.723 197.746 151.541C198.562 152.359 199.669 152.819 200.824 152.819C201.978 152.819 203.085 152.359 203.902 151.541C204.718 150.723 205.176 149.613 205.176 148.455V115.27L231.294 100.936V165.779Z" fill="#214184" />
-                </Svg>
+                </Svg> */}
+                <Image style={styles.image} source={require('../../assets/Third.png')} />
+
 
             </View>
 
             {/* Text Content */}
-            <Text style={styles.title}>Pflegeprodukte auswählen</Text>
+            <Text style={styles.title}>Unkomplizierte Abwicklung</Text>
             <Text style={styles.subtitle}>
-                Stellen Sie sich Ihr individuelles Pflegehilfsmittel Paket zusammen
+                Wir übernehmen sämtliche Formalitäten mit der Pflegekasse.
             </Text>
 
             {/* Button */}
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={() => navigation.navigate('Second')}>Hilfe überspringen</Text>
+                <Text style={styles.buttonText} onPress={() => navigation.navigate('Fourth')}>Hilfe überspringen</Text>
             </TouchableOpacity>
 
             {/* Pagination */}
             <View style={styles.pagination}>
+                <Pressable onPress={() => navigation.navigate('Tour')}>
+                    <View style={[styles.dot]} />
+                </Pressable>
+                <Pressable onPress={() => navigation.navigate('Second')}>
+                    <View style={[styles.dot]} />
+                </Pressable>
                 <View style={[styles.dot, styles.activeDot]} />
-                <View style={styles.dot} />
-                <View style={styles.dot} />
-                <View style={styles.dot} />
+                <View style={[styles.dot]} />
             </View>
         </View>
     )
 }
 
-export default First
+export default Third
 
 const styles = StyleSheet.create({
     container: {
@@ -79,6 +87,10 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         marginBottom: 150,
+    },
+    image: {
+        marginBottom: 40,
+
     },
     iconContainer: {
         flexDirection: 'row',
@@ -107,7 +119,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     button: {
-        backgroundColor: '#f0f0f0',
+        // backgroundColor: '#f0f0f0',
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderColor: "#224184",

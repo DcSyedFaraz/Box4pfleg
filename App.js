@@ -8,7 +8,7 @@ import RNBootSplash from "react-native-bootsplash";
 import First from './screens/tour/first';
 
 
-const Stack = createNativeStackNavigator();
+
 
 const App = () => {
   useEffect(() => {
@@ -17,22 +17,7 @@ const App = () => {
   }, []);
   return (
 
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
-          {/* Splash Screen */}
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-          {/* Main App */}
-          <Stack.Screen
-            name="Home"
-            component={First}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <AppNavigator />
   );
 };
 

@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Home from '../home';
 import Login from '../login';
 import Homenew from '../homenew';
@@ -7,12 +7,19 @@ import Register from '../register';
 import Checkout from '../checkout';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons'; // or use any icon library
+import SplashScreen from './SplashScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import First from '../tour/first';
+import Second from '../tour/Second';
+import Third from '../tour/Third';
+import Fourth from '../tour/Fourth';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
 const Tab = createBottomTabNavigator();
-
-
+const Stack = createNativeStackNavigator();
+// const firstScreen =
 const CustomTabBar = ({ state, descriptors, navigation }) => {
     return (
         <View style={styles.tabContainer}>
@@ -95,20 +102,58 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
 const AppNavigator = () => {
     return (
-        <View>
+        <NavigationContainer>
+            <Stack.Navigator initialRouteName="Splash">
 
+                {/* Splash Screen */}
+                <Stack.Screen
+                    name="Splash"
+                    component={SplashScreen}
+                    options={{ headerShown: false }}
+                />
+                {/* Main App */}
+                <Stack.Screen
+                    name="Home"
+                    component={TabNavigation}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Tour"
+                    component={First}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Second"
+                    component={Second}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Third"
+                    component={Third}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Fourth"
+                    component={Fourth}
+                    options={{ headerShown: false }}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    )
+}
 
-            <Tab.Navigator
-                screenOptions={{ headerShown: false }}
-                tabBar={(props) => <CustomTabBar {...props} />}
-            >
-                <Tab.Screen name="Profile" component={Home} />
-                <Tab.Screen name="Login" component={Login} />
-                <Tab.Screen name="HomeNew" component={Homenew} />
-                <Tab.Screen name="Alerts" component={Register} />
-                <Tab.Screen name="Cart" component={Checkout} />
-            </Tab.Navigator>
-        </View>
+function TabNavigation() {
+    return (
+        <Tab.Navigator
+            screenOptions={{ headerShown: false }}
+            tabBar={(props) => <CustomTabBar {...props} />}
+        >
+            <Tab.Screen name="Profile" component={Home} />
+            <Tab.Screen name="Login" component={Login} />
+            <Tab.Screen name="HomeNew" component={Homenew} />
+            <Tab.Screen name="Alerts" component={Register} />
+            <Tab.Screen name="Cart" component={Checkout} />
+        </Tab.Navigator>
     )
 }
 

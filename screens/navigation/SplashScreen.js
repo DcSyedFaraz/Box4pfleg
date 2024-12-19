@@ -1,14 +1,23 @@
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const SplashScreen = ({ navigation }) => {
     useEffect(() => {
         const initializeApp = async () => {
+            const hasSeenTour = await AsyncStorage.getItem('hasSeenTour');
             // Simulate initialization tasks (e.g., API calls, data fetching)
             await new Promise((resolve) => setTimeout(resolve, 2000)); // 2-second delay
 
             // Navigate to Home after initialization
-            navigation.replace('Home');
+            // Navigate based on whether the user has seen the tour
+            if (hasSeenTour === 'true') {
+                // navigation.replace('Home');
+                navigation.replace('Tour');
+            } else {
+                navigation.replace('Tour'); // Redirect to tour screen
+            }
         };
 
         initializeApp();
@@ -17,7 +26,7 @@ const SplashScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../../assets/splash.png')}
+                source={require('../../assets/Splash1.png')}
                 style={styles.logo}
                 resizeMode="cover" // Use 'cover' to fill the screen
             />
