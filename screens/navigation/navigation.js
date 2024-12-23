@@ -14,6 +14,7 @@ import First from '../tour/first';
 import Second from '../tour/Second';
 import Third from '../tour/Third';
 import Fourth from '../tour/Fourth';
+import Last from '../tour/Last';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
@@ -135,6 +136,11 @@ const AppNavigator = () => {
                 <Stack.Screen
                     name="Fourth"
                     component={Fourth}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="Last"
+                    component={Last}
                     options={{ headerShown: false }}
                 />
             </Stack.Navigator>

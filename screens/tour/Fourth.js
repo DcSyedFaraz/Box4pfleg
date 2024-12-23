@@ -57,7 +57,7 @@ const Fourth = ({ navigation }) => {
 
             {/* Button */}
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={() => navigation.navigate('Home')}>Hilfe überspringen</Text>
+                <Text style={styles.buttonText} onPress={() => navigation.replace('Last')}>Hilfe überspringen</Text>
             </TouchableOpacity>
 
             {/* Pagination */}

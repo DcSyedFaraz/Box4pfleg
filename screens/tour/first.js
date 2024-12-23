@@ -1,24 +1,64 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import AppIntroSlider from 'react-native-app-intro-slider';
 import Svg, { Path, Circle } from 'react-native-svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-const Tab = createBottomTabNavigator();
-
+const slides = [
+    {
+        key: '0',
+        title: 'Pflegeprodukte auswählen',
+        text: 'Stellen Sie sich Ihr individuelles Pflegehilfsmittel Paket zusammen.',
+        image: require('../../assets/First.png'),
+        backgroundColor: '#ffffff',
+    },
+    {
+        key: '1',
+        title: 'Formular ausfüllen',
+        text: 'Unser Formular direkt online ausfüllen und einreichen.',
+        image: require('../../assets/Second.png'),
+        backgroundColor: '#ffffff',
+    },
+    {
+        key: '2',
+        title: 'Track Progress',
+        text: 'Easily monitor your progress anytime.',
+        image: require('../../assets/Third.png'),
+        backgroundColor: '#ffffff',
+    },
+    {
+        key: '3',
+        title: 'Get Support',
+        text: 'Reach out for support whenever you need.',
+        image: require('../../assets/Fourth.png'),
+        backgroundColor: '#ffffff',
+    },
+];
 
 const First = ({ navigation }) => {
-    const handleFinishTour = async () => {
-        // Mark the tour as completed
-        await AsyncStorage.setItem('hasSeenTour', 'false');
-        navigation.replace('Home'); // Navigate to the main app
+
+    const handleDone = async () => {
+        await AsyncStorage.setItem('hasSeenTour', 'true');
+        navigation.replace('Last');
     };
-    return (
-        <View style={styles.container}>
-            {/* Logo */}
-            <View style={styles.logoContainer}>
+
+    const sliderRef = useRef(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const handleSkipOrDone = () => {
+        if (currentIndex < slides.length - 1) {
+            // Navigate to the next slide
+            sliderRef.current.goToSlide(currentIndex + 1, true);
+        } else {
+            handleDone();
+            console.log('Intro Finished');
+        }
+    };
+
+    const renderSlide = ({ item, index }) => (
+
+        <View style={[styles.slide, { backgroundColor: item.backgroundColor }]}>
+            <View>
                 <Svg width="189" height="47" viewBox="0 0 189 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <Path fill-rule="evenodd" clip-rule="evenodd" d="M57.4084 27.2588C57.4084 21.4995 55.8819 20.1464 52.158 20.1464C51.3136 20.1464 50.1282 20.3141 50.1282 20.3141V12.6928C50.1282 12.6928 49.6194 12.5251 48.9428 12.5251C48.0985 12.5251 47.5897 12.6928 47.5897 12.6928V35.2156C47.5897 35.2156 49.1162 35.5567 51.6547 35.5567C55.8875 35.5567 57.414 32.677 57.414 27.7676V27.2588H57.4084ZM54.8699 27.7676C54.8699 31.3239 54.1933 33.1859 51.6491 33.1859C50.8048 33.1859 50.296 33.0181 50.296 33.0181V22.3494C50.296 22.3494 51.4814 22.1817 52.3257 22.1817C54.5288 22.1817 54.8643 23.026 54.8643 27.0911V27.7676H54.8699Z" fill="#4D4E4E" />
                     <Path fill-rule="evenodd" clip-rule="evenodd" d="M66.5562 27.5999C66.5562 31.4972 66.2151 33.1858 64.3531 33.1858C62.4912 33.1858 62.1501 31.4916 62.1501 27.5999V26.9233C62.1501 23.026 62.4912 22.1817 64.3531 22.1817C66.2151 22.1817 66.5562 23.026 66.5562 26.9233V27.5999ZM69.0948 27.0911C69.0948 22.0083 68.2505 19.9786 64.3531 19.9786C60.4558 19.9786 59.6115 22.0083 59.6115 27.0911V27.7676C59.6115 33.3536 61.138 35.7244 64.3531 35.7244C67.5683 35.7244 69.0948 33.3536 69.0948 27.7676V27.0911Z" fill="#4D4E4E" />
@@ -33,66 +73,71 @@ const First = ({ navigation }) => {
                 </Svg>
 
             </View>
-
-            {/* Main Icon */}
+            {/* <Image style={styles.image} source={item.image} />
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.text}>{item.text}</Text> */}
             <View style={styles.iconContainer}>
-                {/* Plus Icon */}
-                <Svg width="250" height="255" viewBox="0 0 250 215" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <Circle cx="125" cy="102" r="102" fill="#E7F0F8" />
-                    <Path fill-rule="evenodd" clip-rule="evenodd" d="M29.1482 39.1482V21.8518C29.1482 15.4747 34.6229 10 41 10C47.3771 10 52.8518 15.4747 52.8518 21.8518V39.1482H70.1482C76.5253 39.1482 82 44.6229 82 51C82 57.3771 76.5253 62.8518 70.1482 62.8518H52.8518V80.1482C52.8518 86.5253 47.3771 92 41 92C34.6229 92 29.1482 86.5253 29.1482 80.1482V62.8518H11.8518C5.47469 61.9494 0 56.4747 0 50.0976C0 43.7205 5.47469 38.2458 11.8518 38.2458H29.1482V39.1482Z" fill="#8D9AB9" />
-                    <Path d="M234.718 87.2996L170.875 52.2599C169.383 51.4335 167.705 51 166 51C164.295 51 162.617 51.4335 161.125 52.2599L97.2816 87.2996C95.6841 88.1758 94.351 89.4664 93.4218 91.0363C92.4926 92.6062 92.0015 94.3977 92 96.2231V165.779C92.0015 167.604 92.4926 169.396 93.4218 170.966C94.351 172.536 95.6841 173.826 97.2816 174.702L161.125 209.742C162.618 210.567 164.295 211 166 211C167.705 211 169.382 210.567 170.875 209.742L234.718 174.702C236.316 173.826 237.649 172.536 238.578 170.966C239.507 169.396 239.998 167.604 240 165.779V96.2231C239.998 94.3977 239.507 92.6062 238.578 91.0363C237.649 89.4664 236.316 88.1758 234.718 87.2996ZM165.275 59.9107C165.488 59.7936 165.728 59.7322 165.971 59.7322C166.214 59.7322 166.454 59.7936 166.667 59.9107L227.311 93.1832L202.688 106.689L141.37 73.0452L165.275 59.9107ZM161.647 200.091L101.431 167.052C101.209 166.923 101.024 166.737 100.897 166.514C100.77 166.29 100.704 166.036 100.706 165.779V100.936L161.647 134.39V200.091ZM104.689 93.1832L132.308 78.0197L193.619 111.663L166 126.812L104.689 93.1832ZM231.294 165.779C231.296 166.036 231.23 166.29 231.103 166.514C230.976 166.737 230.791 166.923 230.569 167.052L170.353 200.091V134.376L196.471 120.041V148.455C196.471 149.613 196.929 150.723 197.746 151.541C198.562 152.359 199.669 152.819 200.824 152.819C201.978 152.819 203.085 152.359 203.902 151.541C204.718 150.723 205.176 149.613 205.176 148.455V115.27L231.294 100.936V165.779Z" fill="#214184" />
-                </Svg>
+
+                <Image style={styles.image} source={item.image} />
+
 
             </View>
 
             {/* Text Content */}
-            <Text style={styles.title}>Pflegeprodukte auswählen</Text>
-            <Text style={styles.subtitle}>
-                Stellen Sie sich Ihr individuelles Pflegehilfsmittel Paket zusammen
-            </Text>
+            <View style={styles.logoContainer}>
 
-            {/* Button */}
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText} onPress={() => navigation.navigate('Second')}>Hilfe überspringen</Text>
-            </TouchableOpacity>
-
-            {/* Pagination */}
-            <View style={styles.pagination}>
-                <View style={[styles.dot, styles.activeDot]} />
-                <View style={styles.dot} />
-                <View style={styles.dot} />
-                <View style={styles.dot} />
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.text}>
+                    {item.text}
+                </Text>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText} onPress={handleSkipOrDone}>Hilfe überspringen {index}</Text>
+                </TouchableOpacity>
             </View>
-        </View>
-    )
-}
 
-export default First
+        </View>
+    );
+
+    return (
+        <AppIntroSlider
+            renderItem={renderSlide}
+            data={slides}
+            onDone={handleDone}
+            onSlideChange={(index) => setCurrentIndex(index)}
+            // renderNextButton={() => (
+            //     <View style={styles.button}>
+            //         <Text style={styles.buttonText}>Next</Text>
+            //     </View>
+            // )}
+            // renderDoneButton={() => (
+            //     <View style={styles.button}>
+            //         <Text style={styles.buttonText}>Get Started</Text>
+            //     </View>
+            // )}
+            ref={sliderRef}
+            dotStyle={styles.dot}
+            activeDotStyle={styles.activeDot}
+        />
+    );
+};
+
+export default First;
 
 const styles = StyleSheet.create({
-    container: {
+    logoContainer: {
+        marginBottom: 70,
+    },
+    slide: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#fff',
         padding: 20,
     },
-    logoContainer: {
-        marginBottom: 150,
-    },
-    iconContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 30,
-    },
-    plusIcon: {
-        width: 50,
-        height: 50,
-        marginRight: 10,
-    },
-    boxIcon: {
-        width: 80,
-        height: 80,
+    image: {
+        width: 300,
+        height: 400,
+        marginBottom: 10,
+        resizeMode: 'contain',
     },
     title: {
         fontSize: 24,
@@ -100,11 +145,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 10,
     },
-    subtitle: {
+    text: {
         fontSize: 16,
         color: '#555',
         textAlign: 'center',
-        marginBottom: 30,
+        paddingHorizontal: 20,
     },
     button: {
         backgroundColor: '#f0f0f0',
@@ -113,26 +158,30 @@ const styles = StyleSheet.create({
         borderColor: "#224184",
         borderRadius: 5,
         borderWidth: 1,
-        marginBottom: 40,
+        margin: 40,
+        alignItems: 'center',
+    },
+    iconContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 30,
     },
     buttonText: {
         color: '#224184',
         fontSize: 16,
         fontWeight: '700',
     },
-    pagination: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     dot: {
+        backgroundColor: '#ccc',
         width: 18,
         height: 18,
         borderRadius: 9,
-        backgroundColor: '#ccc',
         marginHorizontal: 5,
     },
     activeDot: {
+        width: 18,
+        height: 18,
+        borderRadius: 9,
         backgroundColor: '#224184',
     },
-})
+});
