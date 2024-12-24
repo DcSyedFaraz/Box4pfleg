@@ -90,9 +90,9 @@ const First = ({ navigation }) => {
                 <Text style={styles.text}>
                     {item.text}
                 </Text>
-                <TouchableOpacity style={styles.button}>
+                {/* <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText} onPress={handleSkipOrDone}>Hilfe überspringen {index}</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
 
         </View>
@@ -104,16 +104,16 @@ const First = ({ navigation }) => {
             data={slides}
             onDone={handleDone}
             onSlideChange={(index) => setCurrentIndex(index)}
-            // renderNextButton={() => (
-            //     <View style={styles.button}>
-            //         <Text style={styles.buttonText}>Next</Text>
-            //     </View>
-            // )}
-            // renderDoneButton={() => (
-            //     <View style={styles.button}>
-            //         <Text style={styles.buttonText}>Get Started</Text>
-            //     </View>
-            // )}
+            renderNextButton={() => (
+                <View style={styles.buttons}>
+                    <Text style={styles.buttonText}>Hilfe überspringen</Text>
+                </View>
+            )}
+            renderDoneButton={() => (
+                <View style={styles.buttons}>
+                    <Text style={styles.buttonText}>Hilfe überspringen</Text>
+                </View>
+            )}
             ref={sliderRef}
             dotStyle={styles.dot}
             activeDotStyle={styles.activeDot}
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
+        marginBottom: 100,
     },
     image: {
         width: 300,
@@ -159,6 +160,19 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 1,
         margin: 40,
+        alignItems: 'center',
+    },
+    buttons: {
+        backgroundColor: '#f0f0f0',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderColor: "#224184",
+        borderRadius: 5,
+        position: 'absolute',
+        top: -150,
+        right: 100,
+        borderWidth: 1,
+        marginBottom: 400,
         alignItems: 'center',
     },
     iconContainer: {

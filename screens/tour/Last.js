@@ -31,7 +31,7 @@ const Last = ({ navigation }) => {
                     Einfach einloggen, Pflegehilfsmittel bestellen oder Ihre Boxen individuell anpassen – schnell und unkompliziert.
                 </Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.loginButton}>
+                    <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.loginButton}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.registerButton}>
