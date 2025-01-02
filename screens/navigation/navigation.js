@@ -1,6 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect } from 'react'
-import Home from '../home';
 import Login from '../login';
 import Homenew from '../homenew';
 import Register from '../register';
@@ -15,6 +14,8 @@ import Second from '../tour/Second';
 import Third from '../tour/Third';
 import Fourth from '../tour/Fourth';
 import Last from '../tour/Last';
+import LoginScreen from '../auth/LoginScreen';
+import Index from '..';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
@@ -34,9 +35,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     size={28}
                     color={state.index === 0 ? '#2d4e8e' : '#aaa'}
                 />
-                {state.index === 0 && (
-                    <Text style={[styles.tabLabel, styles.activeTabLabel]}>Account</Text>
-                )}
+                <Text
+                    style={[
+                        styles.tabLabel,
+                        { color: state.index === 0 ? '#2d4e8e' : '#aaa' }, // Conditional color
+                    ]}
+                >
+                    Account
+                </Text>
             </TouchableOpacity>
 
             {/* Notifications Tab */}
@@ -49,9 +55,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     size={28}
                     color={state.index === 3 ? '#2d4e8e' : '#aaa'}
                 />
-                {state.index === 3 && (
-                    <Text style={[styles.tabLabel, styles.activeTabLabel]}>Call</Text>
-                )}
+                <Text
+                    style={[
+                        styles.tabLabel,
+                        { color: state.index === 3 ? '#2d4e8e' : '#aaa' }, // Conditional color
+                    ]}
+                >
+                    Call
+                </Text>
             </TouchableOpacity>
 
             {/* Center Add Button */}
@@ -77,9 +88,14 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     size={28}
                     color={state.index === 4 ? '#2d4e8e' : '#aaa'}
                 />
-                {state.index === 4 && (
-                    <Text style={[styles.tabLabel, styles.activeTabLabel]}>Help</Text>
-                )}
+                <Text
+                    style={[
+                        styles.tabLabel,
+                        { color: state.index === 4 ? '#2d4e8e' : '#aaa' }, // Conditional color
+                    ]}
+                >
+                    Help
+                </Text>
             </TouchableOpacity>
 
             {/* HomeNew Tab */}
@@ -92,11 +108,17 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                     size={28}
                     color={state.index === 2 ? '#2d4e8e' : '#aaa'}
                 />
-                {state.index === 2 && (
-                    <Text style={[styles.tabLabel, styles.activeTabLabel]}>Notice</Text>
-                )}
+                <Text
+                    style={[
+                        styles.tabLabel,
+                        { color: state.index === 2 ? '#2d4e8e' : '#aaa' }, // Conditional color
+                    ]}
+                >
+                    Notice
+                </Text>
             </TouchableOpacity>
         </View>
+
     );
 };
 
@@ -143,18 +165,43 @@ const AppNavigator = () => {
                     component={Last}
                     options={{ headerShown: false }}
                 />
+                <Stack.Screen
+                    name="Login"
+                    component={LoginScreen}
+                    options={{
+                        headerShown: true,
+                        headerTitle: (props) => <LogoTitle {...props} />,
+                    }}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     )
 }
 
+function LogoTitle() {
+    return (
+        <View style={styles.logoContainer}>
+            <Image
+                style={styles.logoImage}
+                source={require('../../assets/logo.png')}
+                onError={(e) => console.log('Image Load Error: ', e.nativeEvent.error)} // Debug: Log errors if the image fails to load
+            />
+            {/* <Text style={styles.logoText}>Logo</Text> */}
+        </View>
+    );
+}
+
 function TabNavigation() {
     return (
         <Tab.Navigator
-            screenOptions={{ headerShown: false }}
+            screenOptions={{ 
+                headerShown: true, 
+                headerTitle: (props) => <LogoTitle {...props} />,
+                headerTitleAlign: 'center',
+             }}
             tabBar={(props) => <CustomTabBar {...props} />}
         >
-            <Tab.Screen name="Profile" component={Home} />
+            <Tab.Screen name="Index" component={Index} />
             <Tab.Screen name="Login" component={Login} />
             <Tab.Screen name="HomeNew" component={Homenew} />
             <Tab.Screen name="Alerts" component={Register} />
@@ -166,6 +213,23 @@ function TabNavigation() {
 export default AppNavigator
 
 const styles = StyleSheet.create({
+    logoContainer: {
+        // flex: 1, // Take up the entire available space
+        flexDirection: 'row',
+        alignItems: 'center',
+        // backgroundColor: 'black',
+        justifyContent: 'center', // Center horizontally
+    },
+    logoImage: {
+        // marginLeft: 100,
+        width: 170, // Updated dimensions
+        height: 40, // Updated dimensions
+        // resizeMode: 'contain',
+    },
+    logoText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     boldIcon: {
         textShadowColor: 'black',
         textShadowOffset: { width: 0, height: 0 },
@@ -197,8 +261,8 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         bottom: 15, // Adjust as needed
         alignSelf: 'center',
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
         borderRadius: 45,
         backgroundColor: '#2d4e8e',
         alignItems: 'center',
@@ -209,8 +273,8 @@ const styles = StyleSheet.create({
         // shadowRadius: 5,
         marginBottom: 50,
         elevation: 5,
-        borderWidth: 10,
-        borderColor: '#ffffff',
+        // borderWidth: 10,
+        // borderColor: '#ffffff',
     },
     tabLabel: {
         fontSize: 10,

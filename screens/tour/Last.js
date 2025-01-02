@@ -10,11 +10,6 @@ const Tab = createBottomTabNavigator();
 
 
 const Last = ({ navigation }) => {
-    const handleFinishTour = async () => {
-        // Mark the tour as completed
-        await AsyncStorage.setItem('hasSeenTour', 'false');
-        navigation.replace('Home'); // Navigate to the main app
-    };
 
     return (
         <View style={styles.container}>
@@ -31,7 +26,7 @@ const Last = ({ navigation }) => {
                     Einfach einloggen, Pflegehilfsmittel bestellen oder Ihre Boxen individuell anpassen – schnell und unkompliziert.
                 </Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={() => navigation.replace('Home')} style={styles.loginButton}>
+                    <TouchableOpacity onPress={() => navigation.replace('Login')} style={styles.loginButton}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>
                     {/* <TouchableOpacity style={styles.registerButton}>
