@@ -1,6 +1,6 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, BackHandler, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect } from 'react'
-import Login from '../login';
+import Product from '../product';
 import Homenew from '../homenew';
 import Register from '../register';
 import Checkout from '../checkout';
@@ -16,6 +16,9 @@ import Fourth from '../tour/Fourth';
 import Last from '../tour/Last';
 import LoginScreen from '../auth/LoginScreen';
 import Index from '..';
+import CenterIcon from '../../assets/SVG/centerIcon';
+import BackIcon from '../../assets/SVG/backIcon';
+import ExitIcon from '../../assets/SVG/ExitIcon';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
@@ -70,12 +73,15 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
                 style={styles.centerButton}
                 onPress={() => navigation.navigate(state.routes[1].name)}
             >
-                <Ionicons
+                {/* <Ionicons
                     name="add-sharp"
                     size={40}
                     color="#fff"
                     style={styles.boldIcon}
-                />
+                /> */}
+                <View style={styles.boldIcon}>
+                    <CenterIcon width="32" height="32" />
+                </View>
             </TouchableOpacity>
 
             {/* Checkout Tab */}
@@ -194,15 +200,41 @@ function LogoTitle() {
 function TabNavigation() {
     return (
         <Tab.Navigator
-            screenOptions={{ 
-                headerShown: true, 
+            screenOptions={({ navigation }) => ({
+                headerShown: true,
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerTitleAlign: 'center',
-             }}
+                headerRight: () => (
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (navigation.canGoBack()) {
+                                navigation.goBack();
+                            } else {
+                                Alert.alert(
+                                    'Exit App',
+                                    'Are you sure you want to exit?',
+                                    [
+                                        { text: 'Cancel', style: 'cancel' },
+                                        { text: 'Exit', onPress: () => BackHandler.exitApp() },
+                                    ],
+                                    { cancelable: true }
+                                );
+                            }
+                        }}
+                        style={{ marginRight: 15 }}
+                    >
+                        {navigation.canGoBack() ? (
+                            <BackIcon width={24} height={24} />
+                        ) : (
+                            <ExitIcon width={24} height={24} />
+                        )}
+                    </TouchableOpacity>
+                ),
+            })}
             tabBar={(props) => <CustomTabBar {...props} />}
         >
             <Tab.Screen name="Index" component={Index} />
-            <Tab.Screen name="Login" component={Login} />
+            <Tab.Screen name="Product" component={Product} />
             <Tab.Screen name="HomeNew" component={Homenew} />
             <Tab.Screen name="Alerts" component={Register} />
             <Tab.Screen name="Cart" component={Checkout} />
@@ -231,6 +263,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     boldIcon: {
+        marginTop: 5,
+        marginRight: -5,
         textShadowColor: 'black',
         textShadowOffset: { width: 0, height: 0 },
         textShadowRadius: 2,       // Increased from 5 to 8 for a more pronounced shadow

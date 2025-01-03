@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import {
     View,
     Text,
@@ -7,9 +9,11 @@ import {
     StyleSheet,
     Image,
     Alert,
+    ScrollView,
+    Dimensions,
 } from 'react-native';
 
-const LoginScreen= ({ navigation }) => {
+const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -24,6 +28,10 @@ const LoginScreen= ({ navigation }) => {
     };
 
     return (
+
+        // <KeyboardAwareScrollView>
+        // <ScrollView>  
+
         <View style={styles.container}>
             <Image
                 source={require('../../assets/bgimage.png')} // Replace with your image path
@@ -94,6 +102,8 @@ const LoginScreen= ({ navigation }) => {
                 </View>
             </View>
         </View>
+        // </ScrollView>
+        // {/* </KeyboardAwareScrollView> */}
     );
 };
 
@@ -108,7 +118,9 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        flex: 1,
+        // flex: 1,
+        width: Dimensions.get('window').width,
+        height: Dimensions.get('window').height,
         backgroundColor: '#F8F8F8',
         alignItems: 'center',
         justifyContent: 'center',
@@ -170,8 +182,8 @@ const styles = StyleSheet.create({
         width: '45%',
     },
     socialcontainer: {
-        position: 'absolute',
-        bottom: 20, // Distance from the bottom of the screen
+        // position: 'absolute',
+        // bottom: 20, // Distance from the bottom of the screen
         alignSelf: 'center',
 
     },
