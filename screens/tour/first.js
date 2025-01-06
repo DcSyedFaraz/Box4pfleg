@@ -90,9 +90,9 @@ const First = ({ navigation }) => {
                 <Text style={styles.text}>
                     {item.text}
                 </Text>
-                {/* <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.button}>
                     <Text style={styles.buttonText} onPress={handleSkipOrDone}>Hilfe überspringen {index}</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </View>
 
         </View>
@@ -104,16 +104,16 @@ const First = ({ navigation }) => {
             data={slides}
             onDone={handleDone}
             onSlideChange={(index) => setCurrentIndex(index)}
-            renderNextButton={() => (
-                <View style={styles.buttons}>
-                    <Text style={styles.buttonText}>Hilfe überspringen</Text>
-                </View>
-            )}
-            renderDoneButton={() => (
-                <View style={styles.buttons}>
-                    <Text style={styles.buttonText}>Hilfe überspringen</Text>
-                </View>
-            )}
+            // renderNextButton={() => (
+            //     <View style={styles.buttons}>
+            //         <Text style={styles.buttonText}>Hilfe überspringen</Text>
+            //     </View>
+            // )}
+            // renderDoneButton={() => (
+            //     <View style={styles.buttons}>
+            //         <Text style={styles.buttonText}>Hilfe überspringen</Text>
+            //     </View>
+            // )}
             ref={sliderRef}
             dotStyle={styles.dot}
             activeDotStyle={styles.activeDot}

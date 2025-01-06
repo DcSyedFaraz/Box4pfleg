@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { ProgressBar, Text, Button, Card, IconButton } from 'react-native-paper';
 
 const Product = () => {
@@ -36,11 +36,12 @@ const Product = () => {
         );
         const maxPercentage = 100;
         const progressValue = Math.min(totalPercentage / maxPercentage, 1);
-        const roundedProgress = Math.round(progressValue * 100); // Round to the nearest integer
+        const roundedProgress = Math.round(progressValue * 100);
 
         setProducts(updatedProducts);
-        setProgress(roundedProgress / 100);
+        setProgress(roundedProgress / 100); // Ensure progress is still a float between 0 and 1
     };
+
 
     return (
         <View style={styles.container}>
@@ -74,39 +75,57 @@ const Product = () => {
             <ScrollView style={styles.scrollView}>
                 {products.map((product) => (
                     <Card key={product.id} style={styles.card}>
-                        <Card.Content>
-                            <View style={styles.header}>
-                                <Text style={styles.percentage}>{product.percentage}%</Text>
-                                <Text style={styles.title}>{product.name}</Text>
-                                <Text style={styles.subtitle}>{`Inhalt pro Packung: ${product.quantity} Stück`}</Text>
+                        <Card.Content style={styles.cardContent}>
+                            <View style={styles.percentageContainer}>
+                                <Text style={styles.percentage}>{Math.round(product.percentage)}%</Text>
+                                <View style={styles.imageWrapper}>
+                                    <Image
+                                        source={{ uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_Bed-Protection-Pads-1-150x150.png' }} // Replace with your image path
+                                        style={styles.productImage}
+                                        resizeMode="contain"
+                                    />
+                                </View>
+                            </View>
+
+                            <View style={styles.textContainer}>
+                                <Text style={styles.productName}>{product.name}</Text>
+                                <Text style={styles.subtitle}>
+                                    {`Inhalt pro Packung: ${product.quantity} Stück`}
+                                </Text>
                             </View>
                             <View style={styles.controls}>
                                 <IconButton
                                     icon="minus"
+                                    iconColor="white"
                                     onPress={() => handleRemove(product.id)}
+                                    size={10}
+                                    color="#214184"
                                     style={styles.iconButton}
-                                    size={24}
                                 />
                                 <Text style={styles.quantity}>{product.quantity}</Text>
                                 <IconButton
                                     icon="plus"
+                                    iconColor="white"
                                     onPress={() => handleAdd(product.id)}
+                                    size={10}
+                                    color="#214184"
                                     style={styles.iconButton}
-                                    size={24}
                                 />
                             </View>
                         </Card.Content>
                     </Card>
 
+
                 ))}
+                <Button
+                    mode="contained"
+                    onPress={() => alert('Pflegepaket gespeichert!')}
+                    style={[styles.button, { backgroundColor: progress >= 0.6 ? '#4CAF50' : '#D3E3F5' }]}
+
+                >
+                    Pflegepaket abschließen
+                </Button>
             </ScrollView>
-            <Button
-                mode="contained"
-                onPress={() => alert('Pflegepaket gespeichert!')}
-                style={styles.button}
-            >
-                Pflegepaket abschließen
-            </Button>
         </View>
     );
 };
@@ -145,6 +164,12 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     container: { flex: 1, padding: 20, backgroundColor: '#f5f5f5' },
+    cardContent: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+    },
     header: { fontWeight: 'bold', color: '#2d4e8e' },
     blackheader: { fontWeight: 'bold', marginBottom: 10 },
     subheader: { marginBottom: 20, color: '#555' },
@@ -152,29 +177,83 @@ const styles = StyleSheet.create({
     progressText: { textAlign: 'center', marginVertical: 10, fontSize: 16 },
     scrollView: { flex: 1, marginTop: 10 },
     card: {
+        marginVertical: 4,
+        borderRadius: 12,
+        elevation: 2,
+        backgroundColor: '#FFFFFF',
+        overflow: 'hidden',
+        padding: 5,
+    },
+    cardContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    percentageContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 10,
         marginBottom: 10,
+        width: 60,
+    },
+    percentage: {
         borderRadius: 10,
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#ddd',
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+        backgroundColor: '#E6F7FF',
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#3178C6',
+        marginBottom: 4,
+    },
+    imageWrapper: {
+        width: 40, // Adjust based on your image size
+        height: 40, // Adjust based on your image size
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    productImage: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 8, // Optional, for rounded edges
+    },
+    textContainer: {
+        flex: 1,
+        marginRight: 5,
+    },
+    productName: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#214184',
+    },
+    subtitle: {
+        fontSize: 12,
+        color: '#6E6E6E',
+        marginTop: 4,
     },
     controls: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-around',
+        backgroundColor: '#E6F7FF',
+        borderRadius: 30,
+        paddingHorizontal: 4,
+        paddingVertical: 2,
     },
     iconButton: {
-        backgroundColor: '#ddd',
-        borderRadius: 5,
-        padding: 5,
+        marginHorizontal: 2,
+        backgroundColor: '#214184',
+        color: 'white',
     },
     quantity: {
-        fontSize: 18,
-        minWidth: 30,
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#214184',
+        marginHorizontal: 4,
         textAlign: 'center',
     },
     button: {
         marginTop: 20,
+        marginBottom: 100,
         backgroundColor: '#4CAF50',
         paddingVertical: 10,
     },

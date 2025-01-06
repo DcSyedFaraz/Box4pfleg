@@ -13,8 +13,8 @@ const SplashScreen = ({ navigation }) => {
             // Navigate to Home after initialization
             // Navigate based on whether the user has seen the tour
             if (hasSeenTour === 'true') {
-                navigation.replace('Login');
-                // navigation.replace('Tour');
+                // navigation.replace('Login');
+                navigation.replace('Product');
             } else {
                 navigation.replace('Tour'); // Redirect to tour screen
             }
