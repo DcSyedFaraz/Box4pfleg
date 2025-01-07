@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions, Text, Platform } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions, Text, Platform, StatusBar } from 'react-native';
 import AppNavigator from './screens/navigation/navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen from './screens/navigation/SplashScreen';
 import RNBootSplash from "react-native-bootsplash";
-import First from './screens/tour/first';
+import { Provider } from 'react-redux';
+import store from './screens/store';
 
 
 
@@ -17,7 +18,11 @@ const App = () => {
   }, []);
   return (
 
-    <AppNavigator />
+    <Provider store={store}>
+      <StatusBar backgroundColor="white" barStyle="dark-content" />
+      <AppNavigator />
+    </Provider>
+
   );
 };
 

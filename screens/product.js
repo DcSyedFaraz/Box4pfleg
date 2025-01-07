@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet, Image } from 'react-native';
 import { ProgressBar, Text, Button, Card, IconButton } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { setProgress } from './store/progressSlice'; // Adjust the path as necessary
 
 const Product = () => {
+    const dispatch = useDispatch();
+    const progress = useSelector((state) => state.progress.value); // Access progress from Redux
+
     const [products, setProducts] = useState([
-        { id: 1, name: 'Bettschutzeinlage', percentage: 31, quantity: 0, max: 5 },
-        { id: 2, name: 'Desinfektionstücher', percentage: 18, quantity: 0, max: 5 },
-        { id: 3, name: 'Einmalhandschuhe', percentage: 24, quantity: 0, max: 5 },
-        { id: 4, name: 'FFP2 Masken', percentage: 11, quantity: 0, max: 5 },
+        { id: 1, name: 'Bettschutzeinlage', percentage: 31, quantity: 0, max: 5, uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_Bed-Protection-Pads-1-150x150.png' },
+        { id: 2, name: 'Desinfektionstücher', percentage: 18, quantity: 0, max: 5, uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_Disposable-gloves-1-100x100.png' },
+        { id: 3, name: 'Einmalhandschuhe', percentage: 24, quantity: 0, max: 5, uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_-Fingerlings-1-150x150.png' },
+        { id: 4, name: 'FFP2 Masken', percentage: 11, quantity: 0, max: 5, uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_Disinfection-Liquid-1-150x150.png' },
     ]);
-    const [progress, setProgress] = useState(0);
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
     const handleAdd = (id) => {
         const updatedProducts = products.map((product) =>
@@ -30,17 +36,32 @@ const Product = () => {
     };
 
     const updateProgress = (updatedProducts) => {
-        const totalPercentage = updatedProducts.reduce(
-            (sum, product) => sum + product.percentage * product.quantity,
-            0
-        );
+        // Calculate total percentage with proper parsing
+        const totalPercentage = updatedProducts.reduce((sum, product) => {
+            const percentage = parseFloat(product.percentage) || 0;
+            const quantity = parseInt(product.quantity, 10) || 0;
+            return sum + percentage * quantity;
+        }, 0);
+
         const maxPercentage = 100;
-        const progressValue = Math.min(totalPercentage / maxPercentage, 1);
-        const roundedProgress = Math.round(progressValue * 100);
+        // Clamp the totalPercentage to maxPercentage to avoid exceeding 100%
+        const clampedTotal = clamp(totalPercentage, 0, maxPercentage);
+
+        // Calculate progress as a float between 0 and 1, rounded to two decimal places
+        const progressValue = parseFloat((clampedTotal / maxPercentage).toFixed(2));
 
         setProducts(updatedProducts);
-        setProgress(roundedProgress / 100); // Ensure progress is still a float between 0 and 1
+        // console.log('Total Percentage:', totalPercentage);
+        // console.log('Clamped Total:', clampedTotal);
+        console.log('Progress Value:', progressValue);
+        // console.log('Progress Value:', progressValue);
+
+        // If setProgress expects a value between 0 and 1
+        dispatch(setProgress(progressValue));
+
     };
+
+
 
 
     return (
@@ -80,7 +101,7 @@ const Product = () => {
                                 <Text style={styles.percentage}>{Math.round(product.percentage)}%</Text>
                                 <View style={styles.imageWrapper}>
                                     <Image
-                                        source={{ uri: 'https://box4pflege.de/wp-content/uploads/2022/05/Icons_Bed-Protection-Pads-1-150x150.png' }} // Replace with your image path
+                                        source={{ uri: product.uri }} // Replace with your image path
                                         style={styles.productImage}
                                         resizeMode="contain"
                                     />
@@ -121,6 +142,7 @@ const Product = () => {
                     mode="contained"
                     onPress={() => alert('Pflegepaket gespeichert!')}
                     style={[styles.button, { backgroundColor: progress >= 0.6 ? '#4CAF50' : '#D3E3F5' }]}
+                    disabled={progress < 0.6}
 
                 >
                     Pflegepaket abschließen
@@ -192,7 +214,7 @@ const styles = StyleSheet.create({
     percentageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 10,
+        marginRight: 5,
         marginBottom: 10,
         width: 60,
     },
@@ -205,6 +227,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#3178C6',
         marginBottom: 4,
+        marginRight: -10,
     },
     imageWrapper: {
         width: 40, // Adjust based on your image size

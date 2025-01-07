@@ -19,6 +19,8 @@ import Index from '..';
 import CenterIcon from '../../assets/SVG/centerIcon';
 import BackIcon from '../../assets/SVG/backIcon';
 import ExitIcon from '../../assets/SVG/ExitIcon';
+import { useSelector } from 'react-redux';
+import Logo from '../../assets/SVG/logo';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
@@ -26,6 +28,9 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 // const firstScreen =
 const CustomTabBar = ({ state, descriptors, navigation }) => {
+    const progress = useSelector((state) => state.progress.value);
+    const centerButtonColor = progress >= 0.6 ? '#4CAF50' : '#2d4e8e';
+    console.log('Progress Valuess:', progress);
     return (
         <View style={styles.tabContainer}>
             {/* Profile Tab */}
@@ -70,7 +75,7 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
 
             {/* Center Add Button */}
             <TouchableOpacity
-                style={styles.centerButton}
+                style={[styles.centerButton, { backgroundColor: centerButtonColor }]}
                 onPress={() => navigation.navigate(state.routes[1].name)}
             >
                 {/* <Ionicons
@@ -187,11 +192,12 @@ const AppNavigator = () => {
 function LogoTitle() {
     return (
         <View style={styles.logoContainer}>
-            <Image
+            {/* <Image
                 style={styles.logoImage}
                 source={require('../../assets/logo.png')}
                 onError={(e) => console.log('Image Load Error: ', e.nativeEvent.error)} // Debug: Log errors if the image fails to load
-            />
+            /> */}
+            <Logo />
             {/* <Text style={styles.logoText}>Logo</Text> */}
         </View>
     );
@@ -200,7 +206,11 @@ function LogoTitle() {
 function TabNavigation() {
     return (
         <Tab.Navigator
+            initialRouteName="Product"
+
             screenOptions={({ navigation }) => ({
+                // tabBarStyle: { backgroundColor: "red" },
+                // headerStyle: { backgroundColor: "red" },
                 headerShown: true,
                 headerTitle: (props) => <LogoTitle {...props} />,
                 headerTitleAlign: 'center',

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, StatusBar } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -14,7 +14,7 @@ const SplashScreen = ({ navigation }) => {
             // Navigate based on whether the user has seen the tour
             if (hasSeenTour === 'true') {
                 // navigation.replace('Login');
-                navigation.replace('Product');
+                navigation.replace('Home');
             } else {
                 navigation.replace('Tour'); // Redirect to tour screen
             }
@@ -25,6 +25,7 @@ const SplashScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar backgroundColor="#486298" barStyle="light-content" />
             <Image
                 source={require('../../assets/Splash1.png')}
                 style={styles.logo}

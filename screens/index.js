@@ -125,8 +125,9 @@ const styles = StyleSheet.create({
     gridItem: {
         width: '48%',
         backgroundColor: '#FFF',
-        padding: 20,
-        marginBottom: 20,
+        padding: 10,
+        paddingHorizontal: 15,
+        marginBottom: 10,
         borderRadius: 10,
         alignItems: 'center',
         shadowColor: '#000',
