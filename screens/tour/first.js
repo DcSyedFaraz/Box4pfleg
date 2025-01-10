@@ -186,16 +186,19 @@ const styles = StyleSheet.create({
         fontWeight: '700',
     },
     dot: {
-        backgroundColor: '#ccc',
+        backgroundColor: 'white',
+        borderWidth: 1,
+        borderColor: "#224184",
+        // borderRadius: 5,
         width: 18,
         height: 18,
         borderRadius: 9,
         marginHorizontal: 5,
     },
     activeDot: {
-        width: 18,
-        height: 18,
-        borderRadius: 9,
+        width: 24,
+        height: 24,
+        borderRadius: 12,
         backgroundColor: '#224184',
     },
 });

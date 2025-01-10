@@ -12,7 +12,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import First from '../tour/first';
 import Second from '../tour/Second';
 import Third from '../tour/Third';
-import Fourth from '../tour/Fourth';
+import Fourth from '../tour/StepIndicator';
 import Last from '../tour/Last';
 import LoginScreen from '../auth/LoginScreen';
 import Index from '..';
@@ -21,6 +21,7 @@ import BackIcon from '../../assets/SVG/backIcon';
 import ExitIcon from '../../assets/SVG/ExitIcon';
 import { useSelector } from 'react-redux';
 import Logo from '../../assets/SVG/logo';
+import Form from '../tour/Form';
 // import { NavigationContainer, NavigationIndependentTree } from '@react-navigation/native';
 
 
@@ -133,6 +134,15 @@ const CustomTabBar = ({ state, descriptors, navigation }) => {
     );
 };
 
+const MultiStepFormStack = () => {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Form" component={Form} />
+            {/* <Stack.Screen name="FormStep2" component={FormStep2} /> */}
+            {/* Add more steps as needed */}
+        </Stack.Navigator>
+    );
+};
 
 const AppNavigator = () => {
     return (
@@ -248,6 +258,11 @@ function TabNavigation() {
             <Tab.Screen name="HomeNew" component={Homenew} />
             <Tab.Screen name="Alerts" component={Register} />
             <Tab.Screen name="Cart" component={Checkout} />
+            <Tab.Screen
+                name="MultiStepForm"
+                component={MultiStepFormStack}
+                options={{ tabBarButton: () => null }} // Hides the tab bar button
+            />
         </Tab.Navigator>
     )
 }

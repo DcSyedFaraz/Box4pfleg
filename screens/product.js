@@ -4,7 +4,7 @@ import { ProgressBar, Text, Button, Card, IconButton } from 'react-native-paper'
 import { useDispatch, useSelector } from 'react-redux';
 import { setProgress } from './store/progressSlice'; // Adjust the path as necessary
 
-const Product = () => {
+const Product = ({ navigation }) => {
     const dispatch = useDispatch();
     const progress = useSelector((state) => state.progress.value); // Access progress from Redux
 
@@ -61,7 +61,13 @@ const Product = () => {
 
     };
 
+    const handleLogin = () => {
+        // Handle login logic here
+        console.log('Form');
 
+        navigation.navigate('MultiStepForm');
+        // Alert.alert('Login', `Email: ${email}\nPassword: ${password}`);
+    };
 
 
     return (
@@ -140,7 +146,7 @@ const Product = () => {
                 ))}
                 <Button
                     mode="contained"
-                    onPress={() => alert('Pflegepaket gespeichert!')}
+                    onPress={handleLogin}
                     style={[styles.button, { backgroundColor: progress >= 0.6 ? '#4CAF50' : '#D3E3F5' }]}
                     disabled={progress < 0.6}
 
