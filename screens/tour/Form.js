@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-// import { RadioButton } from 'react-native-paper';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Image, FlatList, Alert } from 'react-native';
+import { Checkbox, Button } from 'react-native-paper';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
 import RadioButtons from './RadioButton';
+import { useSelector } from 'react-redux';
 
 const Form = () => {
+    const products = useSelector((state) => state.products.products);
+    const selectedProducts = products.filter(product => product.quantity > 0);
+
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxToggle = () => {
+        setIsChecked(!isChecked);
+    };
+    const renderProduct = ({ item }) => (
+        <View style={styles.productContainer}>
+            <Image source={{ uri: item.uri }} style={styles.productImage} />
+            <View style={styles.productDetails}>
+                <Text style={styles.productName}>Individuelle Pflegebox → {item.name}</Text>
+                <Text style={styles.productQuantity}>x {item.quantity}</Text>
+            </View>
+        </View>
+    );
     // State for each step's data
     const [formData, setFormData] = useState({
         firstName: '',
@@ -35,7 +53,7 @@ const Form = () => {
     // Validation for Step 2
     const validateStep2 = () => {
         const newErrors = {};
-        if (!formData.recipientType) newErrors.recipientType = 'Please select a recipient type';
+        // if (!formData.recipientType) newErrors.recipientType = 'Please select a recipient type';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0; // If no errors, return true
@@ -370,14 +388,38 @@ const Form = () => {
                     onSubmit={handleSubmit}
                 >
                     <View style={styles.stepContainer}>
-                        <Text style={styles.summaryTitle}>Summary</Text>
-                        <Text style={styles.summaryText}>Anrede: {formData.salutation}</Text>
-                        <Text style={styles.summaryText}>First Name: {formData.firstName}</Text>
-                        <Text style={styles.summaryText}>Last Name: {formData.lastName}</Text>
-                        <Text style={styles.summaryText}>Street: {formData.street}</Text>
-                        <Text style={styles.summaryText}>Postal Code: {formData.postalCode}</Text>
-                        <Text style={styles.summaryText}>City: {formData.city}</Text>
-                        <Text style={styles.summaryText}>Recipient Type: {formData.recipientType}</Text>
+                        <Text style={styles.header}>Ihre Produktauswahl</Text>
+
+                        <FlatList
+                            data={selectedProducts}
+                            renderItem={renderProduct}
+                            keyExtractor={(item) => item.id.toString()}
+                            contentContainerStyle={styles.productList}
+                            nestedScrollEnabled={true}
+                        />
+
+                        <View style={styles.termsContainer}>
+                            <Checkbox
+                                status={isChecked ? "checked" : "unchecked"}
+                                onPress={handleCheckboxToggle}
+                                color="#214184"
+                            />
+                            <Text style={styles.termsText}>
+                                Mit Ihrer Bestellung erklären Sie sich mit unseren{' '}
+                                <Text style={styles.link}>Allgemeinen Geschäftsbedingungen</Text>,{' '}
+                                <Text style={styles.link}>Widerrufsbestimmungen</Text> und{' '}
+                                <Text style={styles.link}>Datenschutzbestimmungen</Text> einverstanden. Hiermit bestätigen Sie, dass wir Ihnen im Rahmen der Pflegehilfsmittelpauschale monatlich Ihre benötigten Pflegehilfsmittel ausliefern.
+                            </Text>
+                        </View>
+
+                        <Button
+                            mode="contained"
+                            onPress={handleSubmit}
+                            style={styles.submitButton}
+                            disabled={!isChecked}
+                        >
+                            Jetzt kostenlos beantragen
+                        </Button>
                     </View>
                 </ProgressStep>
             </ProgressSteps>
@@ -482,6 +524,70 @@ const styles = StyleSheet.create({
     summaryText: {
         fontSize: 16,
         marginBottom: 5,
+    },
+    // New
+    header: {
+        fontSize: 22,
+        fontWeight: "bold",
+        color: "#214184",
+        textAlign: "center",
+        marginBottom: 20,
+    },
+    productList: {
+        marginBottom: 20,
+    },
+    productContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        padding: 10,
+        backgroundColor: "#fff",
+        borderRadius: 8,
+        marginBottom: 10,
+        elevation: 2,
+    },
+    productImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 8,
+        marginRight: 10,
+    },
+    productDetails: {
+        flex: 1,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    productName: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#333",
+        flex: 1,
+    },
+    productQuantity: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#214184",
+        marginLeft: 10,
+    },
+    termsContainer: {
+        flexDirection: "row",
+        alignItems: "flex-start",
+        marginBottom: 20,
+    },
+    termsText: {
+        flex: 1,
+        fontSize: 14,
+        color: "#555",
+    },
+    link: {
+        color: "#214184",
+        textDecorationLine: "underline",
+    },
+    submitButton: {
+        color: "#fff",
+        backgroundColor: "#214184",
+        paddingVertical: 10,
+        borderRadius: 8,
     },
 });
 
