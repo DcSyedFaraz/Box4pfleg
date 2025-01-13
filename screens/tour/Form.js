@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { RadioButton } from 'react-native-paper';
+// import { RadioButton } from 'react-native-paper';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
+import RadioButtons from './RadioButton';
 
 const Form = () => {
     // State for each step's data
@@ -12,12 +13,11 @@ const Form = () => {
         postalCode: '',
         city: '',
         recipientType: '',
+        salutation: 'Frau', // Added salutation to formData
     });
 
     // State for errors
     const [errors, setErrors] = useState({});
-    const [checked, setChecked] = useState('Frau');
-
 
     // Validation for Step 1
     const validateStep1 = () => {
@@ -45,151 +45,339 @@ const Form = () => {
     const handleSubmit = () => {
         Alert.alert('Form Submitted!', JSON.stringify(formData, null, 2));
     };
+
     const progressStepsStyle = {
         activeStepIconBorderColor: '#224184',
         activeLabelColor: '#224184',
         activeStepNumColor: 'white',
         activeStepIconColor: '#224184',
-        completedStepIconColor: '#224184',
-        // disabledStepIconColor: 'white',
-        disabledStepNumColor: '#224184',
         completedStepIconColor: '#4bb543',
         completedProgressBarColor: '#4bb543',
-        // activeLabelFontSize: 18,
+        disabledStepNumColor: '#224184',
     };
+
     return (
         <View style={styles.container}>
             <ProgressSteps
                 {...progressStepsStyle}
-                style={styles.steps}
+            // style={styles.progressSteps}
             >
                 {/* Step 1: Personal Information */}
                 <ProgressStep
-                    label="Step 1"
+                    label="Personal Info"
                     onNext={validateStep1}
                     errors={Object.keys(errors).length > 0}
+                    nextBtnStyle={styles.nextbutton}
+                    nextBtnTextStyle={styles.buttonText}
                 >
                     <View style={styles.stepContainer}>
+                        <Text style={styles.heading}>insured person</Text>
                         <Text style={styles.label}>Anrede</Text>
                         <View style={styles.radioGroup}>
-                            <TouchableOpacity style={styles.radioButton} onPress={() => setChecked('Frau')}>
-                                <RadioButton
-                                    value="Frau"
-                                    status={checked === 'Frau' ? 'checked' : 'unchecked'}
-                                    theme={color => 'green'} // Customize label color
-                                    color="#224184" // Customize selected color
-                                />
-                                <Text style={styles.radioText}>Frau</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.radioButton} onPress={() => setChecked('Herr')}>
-                                <RadioButton
-                                    value="Herr"
-                                    status={checked === 'Herr' ? 'checked' : 'unchecked'}
-
-                                    color="#224184"
-                                />
-                                <Text style={styles.radioText}>Herr</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={styles.radioButton} onPress={() => setChecked('Divers')}>
-                                <RadioButton
-                                    value="Divers"
-                                    status={checked === 'Divers' ? 'checked' : 'unchecked'}
-
-                                    color="#224184"
-                                />
-                                <Text style={styles.radioText}>Divers</Text>
-                            </TouchableOpacity>
+                            <RadioButtons
+                                label="Frau"
+                                selected={formData.salutation === 'Frau'}
+                                onPress={() => setFormData({ ...formData, salutation: 'Frau' })}
+                            />
+                            <RadioButtons
+                                label="Herr"
+                                selected={formData.salutation === 'Herr'}
+                                onPress={() => setFormData({ ...formData, salutation: 'Herr' })}
+                            />
+                            <RadioButtons
+                                label="Divers"
+                                selected={formData.salutation === 'Divers'}
+                                onPress={() => setFormData({ ...formData, salutation: 'Divers' })}
+                            />
                         </View>
-                        <Text style={styles.label}>First Name</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={formData.firstName}
-                            onChangeText={(text) => setFormData({ ...formData, firstName: text })}
-                        />
-                        {errors.firstName && <Text style={styles.error}>{errors.firstName}</Text>}
 
-                        <Text style={styles.label}>Last Name</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={formData.lastName}
-                            onChangeText={(text) => setFormData({ ...formData, lastName: text })}
-                        />
-                        {errors.lastName && <Text style={styles.error}>{errors.lastName}</Text>}
+                        <View style={styles.fullWidth}>
+                            <Text style={styles.label}>Title</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.title}
+                                onChangeText={(text) => setFormData({ ...formData, title: text })}
+                                placeholder="Enter the title"
+                                placeholderTextColor="#999"
+                            />
+                            {errors.title && <Text style={styles.error}>{errors.title}</Text>}
+                        </View>
 
-                        <Text style={styles.label}>Street</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={formData.street}
-                            onChangeText={(text) => setFormData({ ...formData, street: text })}
-                        />
-                        {errors.street && <Text style={styles.error}>{errors.street}</Text>}
+                        {/* Two columns for First Name and Last Name */}
+                        <View style={styles.row}>
+                            <View style={styles.halfWidth}>
+                                <Text style={styles.label}>First Name</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={formData.firstName}
+                                    onChangeText={(text) => setFormData({ ...formData, firstName: text })}
+                                    placeholder="Enter your first name"
+                                    placeholderTextColor="#999"
+                                />
+                                {errors.firstName && <Text style={styles.error}>{errors.firstName}</Text>}
+                            </View>
+                            <View style={styles.halfWidth}>
+                                <Text style={styles.label}>Last Name</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={formData.lastName}
+                                    onChangeText={(text) => setFormData({ ...formData, lastName: text })}
+                                    placeholder="Enter your last name"
+                                    placeholderTextColor="#999"
+                                />
+                                {errors.lastName && <Text style={styles.error}>{errors.lastName}</Text>}
+                            </View>
+                        </View>
 
-                        <Text style={styles.label}>Postal Code</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={formData.postalCode}
-                            onChangeText={(text) => setFormData({ ...formData, postalCode: text })}
-                        />
-                        {errors.postalCode && <Text style={styles.error}>{errors.postalCode}</Text>}
+                        {/* Full-width input for Street */}
+                        <View style={styles.fullWidth}>
+                            <Text style={styles.label}>Street</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.street}
+                                onChangeText={(text) => setFormData({ ...formData, street: text })}
+                                placeholder="Enter your street"
+                                placeholderTextColor="#999"
+                            />
+                            {errors.street && <Text style={styles.error}>{errors.street}</Text>}
+                        </View>
 
-                        <Text style={styles.label}>City</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={formData.city}
-                            onChangeText={(text) => setFormData({ ...formData, city: text })}
-                        />
-                        {errors.city && <Text style={styles.error}>{errors.city}</Text>}
+                        {/* Two columns for Postal Code and City */}
+                        <View style={styles.row}>
+                            <View style={styles.halfWidth}>
+                                <Text style={styles.label}>Postal Code</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={formData.postalCode}
+                                    onChangeText={(text) => setFormData({ ...formData, postalCode: text })}
+                                    placeholder="Enter your postal"
+                                    placeholderTextColor="#999"
+                                // keyboardType="numeric"
+                                />
+                                {errors.postalCode && <Text style={styles.error}>{errors.postalCode}</Text>}
+                            </View>
+                            <View style={styles.halfWidth}>
+                                <Text style={styles.label}>City</Text>
+                                <TextInput
+                                    style={styles.input}
+                                    value={formData.city}
+                                    onChangeText={(text) => setFormData({ ...formData, city: text })}
+                                    placeholder="Enter your city"
+                                    placeholderTextColor="#999"
+                                />
+                                {errors.city && <Text style={styles.error}>{errors.city}</Text>}
+                            </View>
+                        </View>
+
+                        <Text style={styles.heading}>Für wen beantragen Sie die Pflegebox?</Text>
+                        <View>
+                            <RadioButtons
+                                label="Ich beantrage die Pflegebox für mich persönlich."
+                                selected={formData.recipientType === 'Ich beantrage die Pflegebox für mich persönlich.'}
+                                onPress={() => setFormData({ ...formData, recipientType: 'Ich beantrage die Pflegebox für mich persönlich.' })}
+                            />
+                            <RadioButtons
+                                label="Ich beantrage die Pflegebox für einen Angehörigen oder eine Person die ich betreue."
+                                selected={formData.recipientType === 'Ich beantrage die Pflegebox für einen Angehörigen oder eine Person die ich betreue.'}
+                                onPress={() => setFormData({ ...formData, recipientType: 'Ich beantrage die Pflegebox für einen Angehörigen oder eine Person die ich betreue.' })}
+                            />
+                        </View>
                     </View>
                 </ProgressStep>
 
                 {/* Step 2: Recipient Information */}
                 <ProgressStep
-                    // label="Step 2"
+                    label="Recipient Info"
                     onNext={validateStep2}
                     previousBtnText="Back"
+                    nextBtnStyle={styles.nextbutton}
+                    nextBtnTextStyle={styles.buttonText}
+                    previousBtnStyle={styles.button}
+                    previousBtnTextStyle={styles.buttonText}
                     errors={Object.keys(errors).length > 0}
                 >
                     <View style={styles.stepContainer}>
-                        <Text style={styles.label}>Who are you applying for?</Text>
-                        <TouchableOpacity
-                            style={[
-                                styles.radioButton,
-                                formData.recipientType === 'Self' && styles.radioSelected,
-                            ]}
-                            onPress={() => setFormData({ ...formData, recipientType: 'Self' })}
-                        >
-                            <Text style={styles.radioText}>For Myself</Text>
-                        </TouchableOpacity>
+                        <Text style={styles.heading}>Angaben zur versicherten Person</Text>
 
-                        <TouchableOpacity
-                            style={[
-                                styles.radioButton,
-                                formData.recipientType === 'Other' && styles.radioSelected,
-                            ]}
-                            onPress={() => setFormData({ ...formData, recipientType: 'Other' })}
-                        >
-                            <Text style={styles.radioText}>For Someone Else</Text>
-                        </TouchableOpacity>
-                        {errors.recipientType && <Text style={styles.error}>{errors.recipientType}</Text>}
+                        {/* Date of Birth */}
+                        <View style={styles.fullWidth}>
+                            <Text style={styles.label}>Geburtsdatum</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.birthDate}
+                                onChangeText={(text) => setFormData({ ...formData, birthDate: text })}
+                                placeholder="TT-MM-JJJJ"
+                                placeholderTextColor="#999"
+                            />
+                            {errors.birthDate && <Text style={styles.error}>{errors.birthDate}</Text>}
+                        </View>
+
+                        {/* Insurance Type */}
+                        <Text style={styles.label}>Angaben zur Krankenkasse/Pflegekasse</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="gesetzlich versichert"
+                                selected={formData.insuranceType === 'gesetzlich'}
+                                onPress={() => setFormData({ ...formData, insuranceType: 'gesetzlich' })}
+                            />
+                            <RadioButtons
+                                label="privat versichert"
+                                selected={formData.insuranceType === 'privat'}
+                                onPress={() => setFormData({ ...formData, insuranceType: 'privat' })}
+                            />
+                            <RadioButtons
+                                label="Beihilfeberechtigt"
+                                selected={formData.insuranceType === 'beihilfe'}
+                                onPress={() => setFormData({ ...formData, insuranceType: 'beihilfe' })}
+                            />
+                            <RadioButtons
+                                label="Orts-/Sozialamt"
+                                selected={formData.insuranceType === 'sozialamt'}
+                                onPress={() => setFormData({ ...formData, insuranceType: 'sozialamt' })}
+                            />
+                        </View>
+
+                        {/* Insurance Provider and Number */}
+                        <View style={styles.fullWidth}>
+                            <Text style={styles.label}>Krankenkasse auswählen</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.insuranceProvider}
+                                onChangeText={(text) => setFormData({ ...formData, insuranceProvider: text })}
+                                placeholder="Ihre Krankenkasse"
+                                placeholderTextColor="#999"
+                            />
+                        </View>
+                        <View style={styles.fullWidth}>
+                            <Text style={styles.label}>Versichertennummer</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.insuranceNumber}
+                                onChangeText={(text) => setFormData({ ...formData, insuranceNumber: text })}
+                                placeholder="Versichertennummer"
+                                placeholderTextColor="#999"
+                            />
+                        </View>
+
+                        {/* Care Level */}
+                        <Text style={styles.label}>Welchen Pflegegrad hat die versicherte Person?</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="Keinen"
+                                selected={formData.careLevel === 'Keinen'}
+                                onPress={() => setFormData({ ...formData, careLevel: 'Keinen' })}
+                            />
+                            {[1, 2, 3, 4, 5].map((level) => (
+                                <RadioButtons
+                                    key={level}
+                                    label={`PG ${level}`}
+                                    selected={formData.careLevel === `PG ${level}`}
+                                    onPress={() => setFormData({ ...formData, careLevel: `PG ${level}` })}
+                                />
+                            ))}
+                        </View>
+
+                        {/* Existing Provider */}
+                        <Text style={styles.label}>Besteht oder bestand eine Pflegehilfsmittel-Versorgung durch einen anderen Anbieter?</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="Ja"
+                                selected={formData.hasExistingProvider === true}
+                                onPress={() => setFormData({ ...formData, hasExistingProvider: true })}
+                            />
+                            <RadioButtons
+                                label="Nein"
+                                selected={formData.hasExistingProvider === false}
+                                onPress={() => setFormData({ ...formData, hasExistingProvider: false })}
+                            />
+                        </View>
+
+                        {/* Bed Pads */}
+                        <Text style={styles.label}>Ich möchte 3 wiederverwendbare Bettschutzeinlagen mit beantragen</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="Ja, bitte mit beantragen"
+                                selected={formData.requestBedPads === true}
+                                onPress={() => setFormData({ ...formData, requestBedPads: true })}
+                            />
+                            <RadioButtons
+                                label="Kein Interesse"
+                                selected={formData.requestBedPads === false}
+                                onPress={() => setFormData({ ...formData, requestBedPads: false })}
+                            />
+                        </View>
+
+                        {/* Delivery Address */}
+                        <Text style={styles.label}>Lieferadresse der Pflegehilfsmittel</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="Versicherte Person"
+                                selected={formData.deliveryAddress === 'insuredPerson'}
+                                onPress={() => setFormData({ ...formData, deliveryAddress: 'insuredPerson' })}
+                            />
+                            <RadioButtons
+                                label="Antragsteller"
+                                selected={formData.deliveryAddress === 'applicant'}
+                                onPress={() => setFormData({ ...formData, deliveryAddress: 'applicant' })}
+                            />
+                            <RadioButtons
+                                label="Abweichende Lieferadresse"
+                                selected={formData.deliveryAddress === 'other'}
+                                onPress={() => setFormData({ ...formData, deliveryAddress: 'other' })}
+                            />
+                        </View>
+
+                        {/* Application Receipt */}
+                        <Text style={styles.label}>Wie möchten Sie Ihren Antrag erhalten?</Text>
+                        <View style={styles.radioGroup}>
+                            <RadioButtons
+                                label="Per Post"
+                                selected={formData.applicationReceipt === 'post'}
+                                onPress={() => setFormData({ ...formData, applicationReceipt: 'post' })}
+                            />
+                            <RadioButtons
+                                label="Per E-Mail"
+                                selected={formData.applicationReceipt === 'email'}
+                                onPress={() => setFormData({ ...formData, applicationReceipt: 'email' })}
+                            />
+                        </View>
+
+                        {/* Awareness Source */}
+                        <Text style={styles.label}>Wie sind Sie auf uns aufmerksam geworden?</Text>
+                        <View style={styles.fullWidth}>
+                            <TextInput
+                                style={styles.input}
+                                value={formData.awarenessSource}
+                                onChangeText={(text) => setFormData({ ...formData, awarenessSource: text })}
+                                placeholder="z.B. über Fachzeitschrift / Magazin"
+                                placeholderTextColor="#999"
+                            />
+                        </View>
                     </View>
+
+
                 </ProgressStep>
 
                 {/* Step 3: Summary */}
                 <ProgressStep
-                    // label="Step 3"
+                    label="Summary"
                     finishBtnText="Submit"
+                    previousBtnText="Back"
+                    previousBtnStyle={styles.button}
+                    previousBtnTextStyle={styles.buttonText}
+                    nextBtnStyle={styles.nextbutton}
+                    nextBtnTextStyle={styles.buttonText}
                     onSubmit={handleSubmit}
                 >
                     <View style={styles.stepContainer}>
                         <Text style={styles.summaryTitle}>Summary</Text>
-                        <Text>First Name: {formData.firstName}</Text>
-                        <Text>Last Name: {formData.lastName}</Text>
-                        <Text>Street: {formData.street}</Text>
-                        <Text>Postal Code: {formData.postalCode}</Text>
-                        <Text>City: {formData.city}</Text>
-                        <Text>Recipient Type: {formData.recipientType}</Text>
+                        <Text style={styles.summaryText}>Anrede: {formData.salutation}</Text>
+                        <Text style={styles.summaryText}>First Name: {formData.firstName}</Text>
+                        <Text style={styles.summaryText}>Last Name: {formData.lastName}</Text>
+                        <Text style={styles.summaryText}>Street: {formData.street}</Text>
+                        <Text style={styles.summaryText}>Postal Code: {formData.postalCode}</Text>
+                        <Text style={styles.summaryText}>City: {formData.city}</Text>
+                        <Text style={styles.summaryText}>Recipient Type: {formData.recipientType}</Text>
                     </View>
                 </ProgressStep>
             </ProgressSteps>
@@ -203,64 +391,97 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 20,
     },
+    next: {
+    },
+    button: {
+        position: 'absolute',
+        bottom: 0,
+        left: -53,     // Horizontal padding
+        backgroundColor: '#002c77', // Blue background
+        borderRadius: 25,           // Rounded corners
+        paddingVertical: 10,        // Vertical padding
+        paddingHorizontal: 20,
+        marginLeft: 22,
+        alignSelf: 'flex-end',        // Bottom margin
+    },
+    nextbutton: {
+        position: 'absolute',
+        bottom: 0,
+        left: -53,     // Horizontal padding
+        backgroundColor: '#002c77', // Blue background
+        borderRadius: 25,           // Rounded corners
+        paddingVertical: 10,        // Vertical padding
+        paddingHorizontal: 20,
+        marginLeft: 10,
+        alignSelf: 'flex-end',        // Bottom margin
+    },
+    buttonText: {
+        color: '#ffffff',           // White text
+        fontSize: 16,               // Font size
+        fontWeight: '600',          // Semi-bold text
+        textTransform: 'capitalize' // Capitalized text
+    },
     stepContainer: {
         flex: 1,
         justifyContent: 'center',
     },
-    steps: {
-        backgroundColor: 'red',
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    fullWidth: {
+        marginBottom: 16,
+    },
+    halfWidth: {
+        width: '48%',
     },
     label: {
         fontSize: 16,
-        marginBottom: 5,
-        color: '#333',
+        fontWeight: 'bold',
+        marginBottom: 8,
+        color: '#224184',
+    },
+    heading: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 8,
+        color: '#224184',
     },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 15,
+        borderRadius: 8,
+        padding: 8,
+        fontSize: 14,
+        backgroundColor: '#fff',
     },
     error: {
         color: 'red',
         fontSize: 12,
         marginBottom: 10,
     },
-    radioButton: {
-        borderWidth: 1,
-        borderColor: '#9bd6f0',
-        backgroundColor: '#f0f9ff',
-        color: '#224184',
-        borderRadius: 5,
-        padding: 10,
-        marginBottom: 10,
-        alignItems: 'center',
+    radioGroup: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexWrap: 'wrap', // Ensures items wrap to the next line if they don't fit
+        // justifyContent: 'space-around',
+        marginBottom: 15,
     },
-    radioSelected: {
-        borderColor: '#4CAF50',
-    },
-    radioText: {
-        color: '#f0f9ff',
-    },
+
+    // radioGroup2: {
+    //     flexDirection: 'column',
+    //     justifyContent: 'space-between',
+    //     marginBottom: 15,
+    // },
+
     summaryTitle: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    label: {
+    summaryText: {
         fontSize: 16,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
-    radioGroup: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    radioText: {
-        fontSize: 16,
+        marginBottom: 5,
     },
 });
 

@@ -216,7 +216,7 @@ function LogoTitle() {
 function TabNavigation() {
     return (
         <Tab.Navigator
-            initialRouteName="Product"
+            initialRouteName="MultiStepForm"
 
             screenOptions={({ navigation }) => ({
                 // tabBarStyle: { backgroundColor: "red" },
@@ -320,8 +320,8 @@ const styles = StyleSheet.create({
         // position: 'absolute',
         bottom: 15, // Adjust as needed
         alignSelf: 'center',
-        width: 80,
-        height: 80,
+        width: 70,
+        height: 70,
         borderRadius: 45,
         backgroundColor: '#2d4e8e',
         alignItems: 'center',
